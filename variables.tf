@@ -32,3 +32,13 @@ variable "aws_zone_name" {
   type = string
   description = "This is the name of the hosted zone"
 }
+
+variable "droplet_count" {
+    type = number
+    description = "Number of droplets to create"
+}
+
+variable "personal_domain_prefix"{ 
+    type = string 
+    description = "Personal prefix for DNS records"
+}
