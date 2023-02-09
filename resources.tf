@@ -3,13 +3,19 @@ resource "digitalocean_ssh_key" "my_ssh_key" {
   public_key = file(var.public_ssh_key_file_path)
 }
 
+resource "random_password" "password" {
+  count = var.droplet_count
+  length = 16
+  special = true
+}
+
 resource "digitalocean_droplet" "web" {
   count = var.droplet_count
   image  = "ubuntu-22-04-x64"
   name   = "web-${count.index + 1}"
   region = element(data.digitalocean_regions.available.regions, 0).slug
   size   = element(data.digitalocean_sizes.main.sizes, 0).slug
-  ssh_keys = [data.digitalocean_ssh_key.some_ssh_key.id, digitalocean_ssh_key.my_ssh_key.id]
+  ssh_keys = [data.digitalocean_ssh_key.existing_ssh_key.id, digitalocean_ssh_key.my_ssh_key.id]
   tags = ["devops", var.email_tag]
 
   provisioner "remote-exec" {
@@ -22,7 +28,7 @@ resource "digitalocean_droplet" "web" {
     }
 
     inline = [
-      "echo 'root:${var.default_password}' | chpasswd"
+      "echo 'root:${random_password.password[count.index].result}' | chpasswd"
     ]
   }
 }
@@ -34,7 +40,7 @@ resource "digitalocean_droplet" "web" {
 resource "aws_route53_record" "my_dns_record" {
   count = var.droplet_count
   zone_id = data.aws_route53_zone.primary.zone_id
-  name    = "${var.personal_domain_prefix}-${count.index + 1}.${data.aws_route53_zone.primary.name}"
+  name    = "${var.personal_domain_prefix}-${count.index + 1}"
   type    = "A"
   ttl     = "300"
   # records = local.droplet_ips

@@ -39,16 +39,11 @@ variable "aws_zone_name" {
 }
 
 variable "droplet_count" {
-    type = number
-    description = "Number of droplets to create"
+  type = number
+  description = "Number of droplets to create"
 }
 
 variable "personal_domain_prefix" { 
-    type = string 
-    description = "The personal prefix for DNS records"
-}
-
-variable "default_password"{ 
-    type = string 
-    description = "The default password of VPS"
+  type = string 
+  description = "The personal prefix for DNS records"
 }

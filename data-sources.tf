@@ -1,4 +1,4 @@
-data "digitalocean_ssh_key" "some_ssh_key" {
+data "digitalocean_ssh_key" "existing_ssh_key" {
   name = var.digitalocean_existing_ssh_key_name
 }
 
