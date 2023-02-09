@@ -3,19 +3,24 @@ variable "digitalocean_access_token" {
   description = "DigitalOcean access token"
 }
 
-variable "digitalocean_ssh_key_file_path" {
+variable "public_ssh_key_file_path" {
   type = string
-  description = "Path to the key to export to DigitalOcean for SSH access."
+  description = "The path to the ssh public key on the local machine"
+}
+
+variable "private_ssh_key_file_path" {
+  type = string
+  description = "The path to the ssh private key on the local machine"
 }
 
 variable "digitalocean_existing_ssh_key_name" {
   type = string
-  description = "Name of the ssh key not managed by Terraform"
+  description = "The name of the ssh key not managed by Terraform"
 }
 
 variable "email_tag" {
   type = string
-  description = "Email of the current user in a tag format"
+  description = "The email of the current user in a tag format"
 }
 
 variable "aws_access_key" {
@@ -38,7 +43,12 @@ variable "droplet_count" {
     description = "Number of droplets to create"
 }
 
-variable "personal_domain_prefix"{ 
+variable "personal_domain_prefix" { 
     type = string 
-    description = "Personal prefix for DNS records"
+    description = "The personal prefix for DNS records"
+}
+
+variable "default_password"{ 
+    type = string 
+    description = "The default password of VPS"
 }

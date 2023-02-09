@@ -1,6 +1,6 @@
 resource "digitalocean_ssh_key" "my_ssh_key" {
   name       = var.email_tag
-  public_key = file(var.digitalocean_ssh_key_file_path)
+  public_key = file(var.public_ssh_key_file_path)
 }
 
 resource "digitalocean_droplet" "web" {
@@ -11,6 +11,20 @@ resource "digitalocean_droplet" "web" {
   size   = element(data.digitalocean_sizes.main.sizes, 0).slug
   ssh_keys = [data.digitalocean_ssh_key.some_ssh_key.id, digitalocean_ssh_key.my_ssh_key.id]
   tags = ["devops", var.email_tag]
+
+  provisioner "remote-exec" {
+      connection {
+      type     = "ssh"
+      user     = "root"
+      private_key = file(var.private_ssh_key_file_path)
+      host     = self.ipv4_address
+      agent    = false
+    }
+
+    inline = [
+      "echo 'root:${var.default_password}' | chpasswd"
+    ]
+  }
 }
 
 # locals {
