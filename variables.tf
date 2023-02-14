@@ -23,21 +23,6 @@ variable "email_tag" {
   description = "The email of the current user in a tag format"
 }
 
-variable "aws_access_key" {
-  type = string
-  description = "AWS access key ID"
-}
-
-variable "aws_secret_key" {
-  type = string
-  description = "AWS secret access key"
-}
-
-variable "aws_zone_name" {
-  type = string
-  description = "This is the name of the hosted zone"
-}
-
 variable "droplet_count" {
   type = number
   description = "Number of droplets to create"
@@ -46,4 +31,43 @@ variable "droplet_count" {
 variable "personal_domain_prefix" { 
   type = string 
   description = "The personal prefix for DNS records"
+}
+
+variable "password_parameters" {
+  type = object({
+    length = number
+	  special = bool
+  })
+  description = "The generated password parameters"
+}
+
+variable "droplet_parameters" {
+  type = object({
+    image = string
+    name = string
+    vcpus = number
+	  memory = number
+	  disk = number
+  })
+  description = "The created droplet parameters"
+}
+
+variable "droplet_connection" {
+  type = object({
+    type = string
+    user = string
+    agent = bool
+  })
+  description = "The parameters of connection block that describe how to access the remote resource"
+}
+
+variable "aws_parameters" {
+  type = object({
+    provider_region = string # AWS region where the provider will operate        
+    provider_access_key = string # AWS access key ID
+    provider_secret_key = string # AWS secret access key
+    zone_name = string # The name of the hosted zone 
+    record_type = string # The record type
+    record_ttl = number # The TTL of the record
+  })  
 }

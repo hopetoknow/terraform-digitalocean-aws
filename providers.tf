@@ -1,9 +1,9 @@
 provider "digitalocean" {
-  token = var.digitalocean_access_token
+	token = var.digitalocean_access_token
 }
 
 provider "aws" {
-  region = "us-east-1"
-  access_key = var.aws_access_key
-  secret_key = var.aws_secret_key
+  region = var.aws_parameters.provider_region
+  access_key = var.aws_parameters.provider_access_key
+  secret_key = var.aws_parameters.provider_secret_key
 }

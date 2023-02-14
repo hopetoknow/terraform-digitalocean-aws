@@ -1,10 +1,31 @@
-digitalocean_access_token=
-public_ssh_key_file_path=
-private_ssh_key_file_path=
-digitalocean_existing_ssh_key_name=
-email_tag=
-aws_access_key=
-aws_secret_key=
-aws_zone_name=
-droplet_count=
-personal_domain_prefix=
+digitalocean_access_token =
+public_ssh_key_file_path =
+private_ssh_key_file_path =
+digitalocean_existing_ssh_key_name =
+email_tag =
+droplet_count =
+personal_domain_prefix =
+password_parameters = {
+	length =
+	special =
+}
+droplet_parameters = {
+	image = 
+	name = 
+	vcpus = 
+	memory = 
+	disk = 
+}
+droplet_connection = {
+	type = 
+  user = 
+  agent = 
+}
+aws_parameters = {
+	provider_region = 
+	provider_access_key = 
+	provider_secret_key = 
+	zone_name = 
+	record_type = 
+  record_ttl = 
+}
