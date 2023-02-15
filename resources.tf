@@ -4,19 +4,19 @@ resource "digitalocean_ssh_key" "my_ssh_key" {
 }
 
 resource "random_password" "password" {
-  count = var.droplet_count
+  count = length(local.dns_names)
   length = var.password_parameters.length
 	special = var.password_parameters.special
 }
 
 resource "digitalocean_droplet" "web" {
-  count = var.droplet_count
+  count = length(local.dns_names)
   image  = var.droplet_parameters.image
   name   = "${var.droplet_parameters.name}-${count.index + 1}"
   region = element(data.digitalocean_regions.available.regions, 0).slug
   size   = element(data.digitalocean_sizes.main.sizes, 0).slug
   ssh_keys = [data.digitalocean_ssh_key.existing_ssh_key.id, digitalocean_ssh_key.my_ssh_key.id]
-  tags = ["devops", var.email_tag]
+  tags = [var.team_tag, var.email_tag]
 
   provisioner "remote-exec" {
       connection {
@@ -33,11 +33,33 @@ resource "digitalocean_droplet" "web" {
   }
 }
 
+locals {
+	dns_names = { for dev in var.devs : dev.prefix => "${dev.login}-${dev.prefix}" }
+}
+
 resource "aws_route53_record" "my_dns_record" {
-  count = var.droplet_count
+  count = length(local.dns_names)
   zone_id = data.aws_route53_zone.primary.zone_id
-  name    = "${var.personal_domain_prefix}-${count.index + 1}"
+  name = "${lookup(local.dns_names, var.devs[count.index].prefix)}"
   type    = var.aws_parameters.record_type
   ttl     = var.aws_parameters.record_ttl
   records = [digitalocean_droplet.web[count.index].ipv4_address]
+}
+
+locals {
+  droplet_info = [
+    for index, dev in var.devs :
+    templatefile("${path.module}/backends.tftpl", {
+      sequence_number = index + 1
+      dns_record_name = aws_route53_record.my_dns_record[index].name
+      dns_zone_name = var.aws_parameters.zone_name
+      ipv4_address = digitalocean_droplet.web[index].ipv4_address
+      root_password = random_password.password[index].result
+    })
+  ]
+}
+
+resource "local_file" "droplets_info" {
+  filename = "droplets_info.txt"
+  content  = join("", local.droplet_info)
 }

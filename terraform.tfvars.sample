@@ -3,8 +3,7 @@ public_ssh_key_file_path =
 private_ssh_key_file_path =
 digitalocean_existing_ssh_key_name =
 email_tag =
-droplet_count =
-personal_domain_prefix =
+team_tag = 
 password_parameters = {
 	length =
 	special =
@@ -29,3 +28,14 @@ aws_parameters = {
 	record_type = 
   record_ttl = 
 }
+devs = [
+	{
+		prefix = 
+		login = 
+	},
+	{
+		prefix =
+		login = 
+	}
+]
+

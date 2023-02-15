@@ -23,14 +23,9 @@ variable "email_tag" {
   description = "The email of the current user in a tag format"
 }
 
-variable "droplet_count" {
-  type = number
-  description = "Number of droplets to create"
-}
-
-variable "personal_domain_prefix" { 
-  type = string 
-  description = "The personal prefix for DNS records"
+variable "team_tag" {
+  type = string
+  description = "The team name in a tag format"
 }
 
 variable "password_parameters" {
@@ -70,4 +65,12 @@ variable "aws_parameters" {
     record_type = string # The record type
     record_ttl = number # The TTL of the record
   })  
+}
+
+variable "devs" {
+	type = list(object({
+		login = string
+		prefix = string
+	}))
+	description = "The login of the user (developer) creating this droplet and the purpose of the created droplet"
 }
