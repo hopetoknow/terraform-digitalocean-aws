@@ -47,14 +47,10 @@ resource "aws_route53_record" "my_dns_record" {
 }
 
 locals {
-  droplet_info = [
-    for index, dev in var.devs :
-    templatefile("${path.module}/backends.tftpl", {
-      sequence_number = index + 1
-      dns_record_name = aws_route53_record.my_dns_record[index].name
-      dns_zone_name = var.aws_parameters.zone_name
-      ipv4_address = digitalocean_droplet.web[index].ipv4_address
-      root_password = random_password.password[index].result
+  droplet_info = [templatefile("${path.module}/backends.tftpl", {
+      dns_record_names = aws_route53_record.my_dns_record.*.fqdn
+      ipv4_addresses = digitalocean_droplet.web.*.ipv4_address
+      root_passwords = random_password.password.*.result
     })
   ]
 }
