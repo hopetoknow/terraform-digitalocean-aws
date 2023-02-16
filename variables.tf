@@ -31,7 +31,7 @@ variable "team_tag" {
 variable "password_parameters" {
   type = object({
     length = number
-	  special = bool
+    special = bool
   })
   description = "The generated password parameters"
 }
@@ -41,8 +41,8 @@ variable "droplet_parameters" {
     image = string
     name = string
     vcpus = number
-	  memory = number
-	  disk = number
+    memory = number
+    disk = number
   })
   description = "The created droplet parameters"
 }
@@ -68,9 +68,9 @@ variable "aws_parameters" {
 }
 
 variable "devs" {
-	type = list(object({
-		login = string
-		prefix = string
-	}))
-	description = "The login of the user (developer) creating this droplet and the purpose of the created droplet"
+  type = list(object({
+    login = string
+    prefix = string
+  }))
+  description = "The login of the user (developer) creating this droplet and the purpose of the created droplet"
 }

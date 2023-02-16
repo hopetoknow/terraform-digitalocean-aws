@@ -6,7 +6,7 @@ resource "digitalocean_ssh_key" "my_ssh_key" {
 resource "random_password" "password" {
   count = length(local.dns_names)
   length = var.password_parameters.length
-	special = var.password_parameters.special
+  special = var.password_parameters.special
 }
 
 resource "digitalocean_droplet" "web" {
@@ -34,7 +34,7 @@ resource "digitalocean_droplet" "web" {
 }
 
 locals {
-	dns_names = { for dev in var.devs : dev.prefix => "${dev.login}-${dev.prefix}" }
+  dns_names = { for dev in var.devs : dev.prefix => "${dev.login}-${dev.prefix}" }
 }
 
 resource "aws_route53_record" "my_dns_record" {

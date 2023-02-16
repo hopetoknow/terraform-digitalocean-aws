@@ -5,37 +5,36 @@ digitalocean_existing_ssh_key_name =
 email_tag =
 team_tag = 
 password_parameters = {
-	length =
-	special =
+  length =
+  special =
 }
 droplet_parameters = {
-	image = 
-	name = 
-	vcpus = 
-	memory = 
-	disk = 
+  image = 
+  name = 
+  vcpus = 
+  memory = 
+  disk = 
 }
 droplet_connection = {
-	type = 
+  type = 
   user = 
   agent = 
 }
 aws_parameters = {
-	provider_region = 
-	provider_access_key = 
-	provider_secret_key = 
-	zone_name = 
-	record_type = 
+  provider_region = 
+  provider_access_key = 
+  provider_secret_key = 
+  zone_name = 
+  record_type = 
   record_ttl = 
 }
 devs = [
-	{
-		prefix = 
-		login = 
-	},
-	{
-		prefix =
-		login = 
-	}
+  {
+    prefix = 
+    login = 
+  },
+  {
+    prefix =
+    login = 
+  }
 ]
-
