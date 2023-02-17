@@ -40,7 +40,7 @@ locals {
 resource "aws_route53_record" "my_dns_record" {
   count = length(local.dns_names)
   zone_id = data.aws_route53_zone.primary.zone_id
-  name = "${lookup(local.dns_names, var.devs[count.index].prefix)}"
+  name = lookup(local.dns_names, var.devs[count.index].prefix)
   type    = var.aws_parameters.record_type
   ttl     = var.aws_parameters.record_ttl
   records = [digitalocean_droplet.web[count.index].ipv4_address]
@@ -48,9 +48,9 @@ resource "aws_route53_record" "my_dns_record" {
 
 locals {
   droplet_info = [templatefile("${path.module}/backends.tftpl", {
-      dns_record_names = aws_route53_record.my_dns_record.*.fqdn
-      ipv4_addresses = digitalocean_droplet.web.*.ipv4_address
-      root_passwords = random_password.password.*.result
+      dns_record_names = aws_route53_record.my_dns_record[*].fqdn
+      ipv4_addresses = digitalocean_droplet.web[*].ipv4_address
+      root_passwords = random_password.password[*].result
     })
   ]
 }
