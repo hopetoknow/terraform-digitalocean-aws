@@ -19,7 +19,7 @@ resource "digitalocean_droplet" "web" {
   tags = [var.team_tag, var.email_tag]
 
   provisioner "remote-exec" {
-      connection {
+    connection {
       type     = var.droplet_connection.type
       user     = var.droplet_connection.user
       private_key = file(var.private_ssh_key_file_path)
