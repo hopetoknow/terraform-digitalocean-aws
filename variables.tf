@@ -36,7 +36,7 @@ variable "password_parameters" {
   description = "The generated password parameters"
 }
 
-variable "droplet_parameters" {
+variable "balancer_droplet_parameters" {
   type = object({
     image = string
     name = string
@@ -44,10 +44,21 @@ variable "droplet_parameters" {
     memory = number
     disk = number
   })
-  description = "The created droplet parameters"
+  description = "The created balancer droplet parameters"
 }
 
-variable "droplet_connection" {
+variable "app_droplet_parameters" {
+  type = object({
+    image = string
+    name = string
+    vcpus = number
+    memory = number
+    disk = number
+  })
+  description = "The created app droplet parameters"
+}
+
+variable "droplets_connection" {
   type = object({
     type = string
     user = string

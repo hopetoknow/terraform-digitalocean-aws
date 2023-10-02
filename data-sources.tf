@@ -2,20 +2,42 @@ data "digitalocean_ssh_key" "existing_ssh_key" {
   name = var.digitalocean_existing_ssh_key_name
 }
 
-data "digitalocean_sizes" "main" {
+data "digitalocean_sizes" "balancer" {
   filter {
     key    = "vcpus"
-    values = [var.droplet_parameters.vcpus]
+    values = [var.balancer_droplet_parameters.vcpus]
   }
 
   filter {
     key    = "memory"
-    values = [var.droplet_parameters.memory]
+    values = [var.balancer_droplet_parameters.memory]
   }
 
   filter {
     key    = "disk"
-    values = [var.droplet_parameters.disk]
+    values = [var.balancer_droplet_parameters.disk]
+  }
+
+  sort {
+    key       = "price_monthly"
+    direction = "asc"
+  }
+}
+
+data "digitalocean_sizes" "app" {
+  filter {
+    key    = "vcpus"
+    values = [var.app_droplet_parameters.vcpus]
+  }
+
+  filter {
+    key    = "memory"
+    values = [var.app_droplet_parameters.memory]
+  }
+
+  filter {
+    key    = "disk"
+    values = [var.app_droplet_parameters.disk]
   }
 
   sort {

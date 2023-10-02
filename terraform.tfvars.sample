@@ -8,14 +8,21 @@ password_parameters = {
   length =
   special =
 }
-droplet_parameters = {
+balancer_droplet_parameters = {
   image = 
   name = 
   vcpus = 
   memory = 
   disk = 
 }
-droplet_connection = {
+app_droplet_parameters = {
+  image = 
+  name = 
+  vcpus = 
+  memory = 
+  disk = 
+}
+droplets_connection = {
   type = 
   user = 
   agent = 
