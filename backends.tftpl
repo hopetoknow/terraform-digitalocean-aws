@@ -1,3 +1,10 @@
-%{ for index, name in dns_record_names ~}
-${index + 1}: ${name} ${ipv4_addresses[index]} ${root_passwords[index]}
+[all]
+site_name=${fqdn} ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+
+[lb]
+${lb_ip} ansible_ssh_common_args='-o StrictHostKeyChecking=no' ${lb_pass}
+
+[app]
+%{ for index, ip in app_ips ~} 
+${ip} ansible_ssh_common_args='-o StrictHostKeyChecking=no' ${app_passes[index]}
 %{ endfor ~}

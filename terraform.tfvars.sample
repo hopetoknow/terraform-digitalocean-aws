@@ -16,6 +16,7 @@ balancer_droplet_parameters = {
   disk = 
 }
 app_droplet_parameters = {
+  count = 
   image = 
   name = 
   vcpus = 
@@ -32,6 +33,7 @@ aws_parameters = {
   provider_access_key = 
   provider_secret_key = 
   zone_name = 
+  record_name = 
   record_type = 
   record_ttl = 
 }

@@ -32,13 +32,13 @@ resource "digitalocean_droplet" "balancer" {
 }
 
 resource "random_password" "app_password" {
-  count = length(local.dns_names)
+  count = var.app_droplet_parameters.count
   length = var.password_parameters.length
   special = var.password_parameters.special
 }
 
 resource "digitalocean_droplet" "app" {
-  count = length(local.dns_names)
+  count = var.app_droplet_parameters.count
   image  = var.app_droplet_parameters.image
   name   = "${var.app_droplet_parameters.name}-${count.index + 1}"
   region = element(data.digitalocean_regions.available.regions, 0).slug
@@ -61,24 +61,21 @@ resource "digitalocean_droplet" "app" {
   }
 }
 
-locals {
-  dns_names = { for dev in var.devs : dev.prefix => "${dev.login}-${dev.prefix}" }
-}
-
 resource "aws_route53_record" "my_dns_record" {
-  count = length(local.dns_names)
   zone_id = data.aws_route53_zone.primary.zone_id
-  name = lookup(local.dns_names, var.devs[count.index].prefix)
+  name = var.aws_parameters.record_name
   type    = var.aws_parameters.record_type
   ttl     = var.aws_parameters.record_ttl
-  records = [digitalocean_droplet.app[count.index].ipv4_address]
+  records = [digitalocean_droplet.balancer.ipv4_address]
 }
 
 locals {
   droplet_info = [templatefile("${path.module}/backends.tftpl", {
-      dns_record_names = aws_route53_record.my_dns_record[*].fqdn
-      ipv4_addresses = digitalocean_droplet.app[*].ipv4_address
-      root_passwords = random_password.app_password[*].result
+      fqdn = aws_route53_record.my_dns_record.fqdn      
+      lb_ip = digitalocean_droplet.balancer.ipv4_address
+      app_ips = digitalocean_droplet.app[*].ipv4_address
+      lb_pass = random_password.balancer_password.result
+      app_passes = random_password.app_password[*].result
     })
   ]
 }
