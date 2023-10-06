@@ -1,10 +1,10 @@
-[all]
-site_name=${fqdn} ansible_ssh_common_args='-o StrictHostKeyChecking=no'
-
 [lb]
-${lb_ip} ansible_ssh_common_args='-o StrictHostKeyChecking=no' ${lb_pass}
+${lb_ip} ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 
 [app]
-%{ for index, ip in app_ips ~} 
-${ip} ansible_ssh_common_args='-o StrictHostKeyChecking=no' ${app_passes[index]}
+%{ for ip in app_ips ~} 
+${ip} ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 %{ endfor ~}
+
+[all:vars]
+site_name=${fqdn}

@@ -71,11 +71,9 @@ resource "aws_route53_record" "my_dns_record" {
 
 locals {
   droplet_info = [templatefile("${path.module}/backends.tftpl", {
-      fqdn = aws_route53_record.my_dns_record.fqdn      
+      fqdn = aws_route53_record.my_dns_record.fqdn
       lb_ip = digitalocean_droplet.balancer.ipv4_address
       app_ips = digitalocean_droplet.app[*].ipv4_address
-      lb_pass = random_password.balancer_password.result
-      app_passes = random_password.app_password[*].result
     })
   ]
 }
