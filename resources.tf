@@ -70,15 +70,23 @@ resource "aws_route53_record" "my_dns_record" {
 }
 
 locals {
-  droplet_info = [templatefile("${path.module}/backends.tftpl", {
+  droplet_info = [templatefile("${path.module}/inventory_template.tftpl", {
       fqdn = aws_route53_record.my_dns_record.fqdn
       lb_ip = digitalocean_droplet.balancer.ipv4_address
       app_ips = digitalocean_droplet.app[*].ipv4_address
     })
   ]
 }
-
-resource "local_file" "droplets_info" {
-  filename = "droplets_info.txt"
+resource "local_file" "ansible_inventory" {
+  filename = "ansible/ansible_inventory"
   content  = join("", local.droplet_info)
+}
+
+resource "null_resource" "ansible_execution" {
+  depends_on = [local_file.ansible_inventory]
+
+  provisioner "local-exec" {
+    command = "ansible-playbook -i ansible_inventory playbook.yml --private-key=${var.private_ssh_key_file_path}" 
+    working_dir = "${path.module}/ansible" 
+  }
 }
