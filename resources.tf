@@ -77,6 +77,7 @@ locals {
     })
   ]
 }
+
 resource "local_file" "ansible_inventory" {
   filename = "ansible/ansible_inventory"
   content  = join("", local.droplet_info)
